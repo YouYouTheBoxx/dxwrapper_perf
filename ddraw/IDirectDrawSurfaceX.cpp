@@ -6549,18 +6549,22 @@ HRESULT m_IDirectDrawSurfaceX::CopySurface(m_IDirectDrawSurfaceX* pSourceSurface
 	// Copy rect and do clipping
 	RECT SrcRect = (pSourceRect ? *pSourceRect : RECT{ 0, 0, (LONG)SrcDesc2.dwWidth, (LONG)SrcDesc2.dwHeight });
 	RECT DestRect = (pDestRect ? *pDestRect : RECT{ 0, 0, (LONG)DestDesc2.dwWidth, (LONG)DestDesc2.dwHeight });
-	LONG Left = min(SrcRect.left, DestRect.left);
-	if (Left < 0)
-	{
-		SrcRect.left -= Left;
-		DestRect.left -= Left;
-	}
-	LONG Top = min(SrcRect.top, DestRect.top);
-	if (Top < 0)
-	{
-		SrcRect.top -= Top;
-		DestRect.top -= Top;
-	}
+        LONG Left = min(SrcRect.left, DestRect.left);
+        if (Left < 0)
+        {
+                SrcRect.left -= Left;
+                SrcRect.right -= Left;
+                DestRect.left -= Left;
+                DestRect.right -= Left;
+        }
+        LONG Top = min(SrcRect.top, DestRect.top);
+        if (Top < 0)
+        {
+                SrcRect.top -= Top;
+                SrcRect.bottom -= Top;
+                DestRect.top -= Top;
+                DestRect.bottom -= Top;
+        }
 
 	// Get source and dest format
 	const D3DFORMAT SrcFormat = pSourceSurface->GetSurfaceFormat();
